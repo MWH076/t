@@ -1,0 +1,286 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <link href="https://unpkg.com/@webpixels/css@1.2.6/dist/index.css" rel="stylesheet">
+
+        <style>
+            .card {
+  margin-top: 20px;
+}
+
+.card-body {
+  text-align: center;
+}
+
+.question {
+  margin-bottom: 20px;
+}
+
+.option {
+  margin-bottom: 10px;
+}
+
+.option label {
+  font-size: 16px;
+}
+
+.result {
+  font-size: 24px;
+}
+
+.orientation-boxes {
+  display: flex;
+  justify-content: space-around;
+  margin-top: 20px;
+}
+
+.orientation-box {
+  width: 50px;
+  height: 50px;
+  border-radius: 8px;
+}
+
+.straight {
+  background-color: #ff4d4d; /* Red for straight */
+}
+
+.bi {
+  background-color: #b366ff; /* Purple for bi */
+}
+
+.gay {
+  background-color: #4da6ff; /* Blue for gay */
+}
+
+        </style>
+    </head>
+
+    <body>
+<div class="container">
+  <div class="card">
+    <div class="card-body">
+      <h3 class="h4">Orientation Quiz</h3>
+      <p>Answer the following questions to determine your likely orientation:</p>
+      <button id="begin-btn" class="btn btn-primary">Begin</button>
+    </div>
+  </div>
+
+  <div id="question-container" class="card d-none">
+    <div class="card-body">
+      <h3 class="h4">Question</h3>
+      <p class="question" id="question"></p>
+      <div id="options-container"></div>
+      <div class="d-grid gap-2 d-md-flex justify-content-md-end">
+        <button id="back-btn" class="btn btn-outline-secondary hide">Back</button>
+        <button id="next-btn" class="btn btn-primary">Next</button>
+        <button id="submit-btn" class="btn btn-success hide">Submit</button>
+      </div>
+    </div>
+  </div>
+
+  <div id="result-container" class="card d-none">
+    <div class="card-body">
+      <h3 class="h4">Result</h3>
+      <p class="result" id="result"></p>
+      <div class="orientation-boxes">
+        <div class="orientation-box straight"></div>
+        <div class="orientation-box bi"></div>
+        <div class="orientation-box gay"></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+    const questions = [
+  {
+    question: "Do you often find yourself lost in thought, daydreaming?",
+    options: [
+      { option: "Yes, I love exploring new ideas.", value: "gay" },
+      { option: "Sometimes, but I usually come back to reality.", value: "bi" },
+      {
+        option: "No, I'm practical and focus on the present.",
+        value: "straight"
+      }
+    ]
+  },
+  {
+    question: "What do you usually do when you're alone?",
+    options: [
+      { option: "I write, create art, or journal.", value: "gay" },
+      { option: "I watch TV, read, or play games.", value: "bi" },
+      { option: "I catch up on work or chores.", value: "straight" }
+    ]
+  },
+  {
+    question: "Do you prefer taking risks or playing it safe?",
+    options: [
+      { option: "I love challenges and trying new things!", value: "gay" },
+      { option: "I take calculated risks but value stability.", value: "bi" },
+      { option: "I stick to what I know to avoid risks.", value: "straight" }
+    ]
+  },
+  {
+    question: "How do you handle conflicts?",
+    options: [
+      { option: "I express myself openly during conflicts.", value: "gay" },
+      { option: "I'm calm but may get defensive.", value: "bi" },
+      { option: "I avoid conflicts and prioritize harmony.", value: "straight" }
+    ]
+  },
+  {
+    question: "Do you enjoy precision and attention to detail?",
+    options: [
+      { option: "Yes, I love puzzles and intricate crafts!", value: "gay" },
+      { option: "Sometimes, but I also like relaxed activities.", value: "bi" },
+      { option: "No, I prefer casual or creative pursuits.", value: "straight" }
+    ]
+  },
+  {
+    question: "What type of music do you often listen to?",
+    options: [
+      { option: "Indie rock, electronic, or alternative", value: "gay" },
+      { option: "Pop, hip-hop, or R&B", value: "bi" },
+      { option: "Classic rock, country, or classical", value: "straight" }
+    ]
+  },
+  {
+    question: "Do you prefer spending time alone or with others?",
+    options: [
+      { option: "Alone - I recharge when I'm by myself", value: "gay" },
+      { option: "With a group - I love socializing!", value: "bi" },
+      {
+        option:
+          "With friends - I enjoy their company but also value alone time.",
+        value: "straight"
+      }
+    ]
+  },
+  {
+    question: "Do you consider yourself creative?",
+    options: [
+      { option: "Yes, I express myself through art or music", value: "gay" },
+      { option: "Maybe - I enjoy creative pursuits.", value: "bi" },
+      { option: "No - I focus on other aspects of life.", value: "straight" }
+    ]
+  },
+  {
+    question: "How do you handle change or unexpected events?",
+    options: [
+      { option: "I'm open to new experiences and adapt easily.", value: "gay" },
+      { option: "I'm flexible but appreciate routine.", value: "bi" },
+      { option: "I prefer predictability and stability.", value: "straight" }
+    ]
+  }
+];
+
+const orientations = {
+  straight: 0,
+  bi: 0,
+  gay: 0
+};
+
+let currentQuestion = 0;
+
+const beginBtn = document.getElementById("begin-btn");
+const questionContainer = document.getElementById("question-container");
+const questionElement = document.getElementById("question");
+const optionsContainer = document.getElementById("options-container");
+const backBtn = document.getElementById("back-btn");
+const nextBtn = document.getElementById("next-btn");
+const submitBtn = document.getElementById("submit-btn");
+const resultContainer = document.getElementById("result-container");
+const resultElement = document.getElementById("result");
+
+beginBtn.addEventListener("click", startQuiz);
+backBtn.addEventListener("click", showPreviousQuestion);
+nextBtn.addEventListener("click", showNextQuestion);
+submitBtn.addEventListener("click", showResult);
+
+function startQuiz() {
+  document.getElementById("begin-btn").classList.add("d-none");
+  document.getElementById("question-container").classList.remove("d-none");
+  showQuestion(currentQuestion);
+}
+
+function showQuestion(index) {
+  const question = questions[index];
+  questionElement.textContent = question.question;
+  optionsContainer.innerHTML = "";
+  question.options.forEach((option, idx) => {
+    const optionInput = document.createElement("input");
+    optionInput.type = "radio";
+    optionInput.name = "option";
+    optionInput.value = option.value;
+    optionInput.id = "option" + idx;
+    optionInput.classList.add("option-input");
+    optionInput.addEventListener("change", () =>
+      selectOrientation(option.value)
+    );
+    const optionLabel = document.createElement("label");
+    optionLabel.textContent = option.option;
+    optionLabel.htmlFor = "option" + idx;
+    optionsContainer.appendChild(optionInput);
+    optionsContainer.appendChild(optionLabel);
+    optionsContainer.appendChild(document.createElement("br")); // Add line break
+  });
+
+  if (index === 0) {
+    backBtn.classList.add("d-none");
+  } else {
+    backBtn.classList.remove("d-none");
+  }
+
+  if (index === questions.length - 1) {
+    nextBtn.classList.add("d-none");
+    submitBtn.classList.remove("d-none");
+  } else {
+    nextBtn.classList.remove("d-none");
+    submitBtn.classList.add("d-none");
+  }
+}
+
+function selectOrientation(orientation) {
+  orientations[orientation]++;
+}
+
+function showNextQuestion() {
+  currentQuestion++;
+  showQuestion(currentQuestion);
+}
+
+function showPreviousQuestion() {
+  currentQuestion--;
+  showQuestion(currentQuestion);
+}
+
+function showResult() {
+  questionContainer.classList.add("d-none");
+  resultContainer.classList.remove("d-none");
+
+  const maxOrientation = Object.keys(orientations).reduce((a, b) => {
+    if (orientations[a] === orientations[b]) {
+      // If there's a tie, prioritize bi orientation
+      return a === "bi" ? a : b;
+    }
+    return orientations[a] > orientations[b] ? a : b;
+  });
+
+  resultElement.textContent = `Based on your responses, it seems you're likely ${
+    maxOrientation === "straight"
+      ? "straight"
+      : maxOrientation === "bi"
+      ? "bisexual"
+      : "gay"
+  }.`;
+
+  document.querySelector(
+    ".straight"
+  ).textContent = `S ${orientations["straight"]}`;
+  document.querySelector(".bi").textContent = `B ${orientations["bi"]}`;
+  document.querySelector(".gay").textContent = `G ${orientations["gay"]}`;
+}
+
+</script>
+    </body>
+</html>
