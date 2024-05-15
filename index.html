@@ -4,7 +4,7 @@
         <link href="https://unpkg.com/@webpixels/css@1.2.6/dist/index.css" rel="stylesheet">
 
         <style>
-            .card {
+           .card {
   margin-top: 20px;
 }
 
@@ -51,128 +51,223 @@
 .gay {
   background-color: #4da6ff; /* Blue for gay */
 }
-
         </style>
     </head>
 
     <body>
-<div class="container">
-  <div class="card">
-    <div class="card-body">
-      <h3 class="h4">Orientation Quiz</h3>
-      <p>Answer the following questions to determine your likely orientation:</p>
-      <button id="begin-btn" class="btn btn-primary">Begin</button>
-    </div>
-  </div>
-
-  <div id="question-container" class="card d-none">
-    <div class="card-body">
-      <h3 class="h4">Question</h3>
-      <p class="question" id="question"></p>
-      <div id="options-container"></div>
-      <div class="d-grid gap-2 d-md-flex justify-content-md-end">
-        <button id="back-btn" class="btn btn-outline-secondary hide">Back</button>
-        <button id="next-btn" class="btn btn-primary">Next</button>
-        <button id="submit-btn" class="btn btn-success hide">Submit</button>
+      <div class="container">
+        <div class="card">
+          <div class="card-body">
+            <h3 class="h4">Orientation Quiz</h3>
+            <p>Answer the following questions to determine your likely orientation</p>
+            <button id="begin-btn" class="btn btn-primary">Begin</button>
+          </div>
+        </div>
+      
+        <div id="question-container" class="card d-none">
+          <div class="card-body">
+            <h3 class="h4">Question</h3>
+            <p class="question" id="question"></p>
+            <div id="options-container"></div>
+            <div class="d-grid gap-2 d-md-flex justify-content-md-end">
+              <button id="back-btn" class="btn btn-outline-secondary hide">Back</button>
+              <button id="next-btn" class="btn btn-primary">Next</button>
+              <button id="submit-btn" class="btn btn-success hide">Submit</button>
+            </div>
+          </div>
+        </div>
+      
+        <div id="result-container" class="card d-none">
+          <div class="card-body">
+            <h3 class="h4">Result</h3>
+            <p class="result" id="result"></p>
+            <div class="orientation-boxes">
+              <div class="orientation-box straight"></div>
+              <div class="orientation-box bi"></div>
+              <div class="orientation-box gay"></div>
+            </div>
+          </div>
+        </div>
       </div>
-    </div>
-  </div>
-
-  <div id="result-container" class="card d-none">
-    <div class="card-body">
-      <h3 class="h4">Result</h3>
-      <p class="result" id="result"></p>
-      <div class="orientation-boxes">
-        <div class="orientation-box straight"></div>
-        <div class="orientation-box bi"></div>
-        <div class="orientation-box gay"></div>
-      </div>
-    </div>
-  </div>
-</div>
 
 <script>
-    const questions = [
+const questions = [
   {
-    question: "Do you often find yourself lost in thought, daydreaming?",
+    question: "Why are you taking this quiz?",
     options: [
-      { option: "Yes, I love exploring new ideas.", value: "gay" },
-      { option: "Sometimes, but I usually come back to reality.", value: "bi" },
-      {
-        option: "No, I'm practical and focus on the present.",
-        value: "straight"
-      }
-    ]
-  },
-  {
-    question: "What do you usually do when you're alone?",
-    options: [
-      { option: "I write, create art, or journal.", value: "gay" },
-      { option: "I watch TV, read, or play games.", value: "bi" },
-      { option: "I catch up on work or chores.", value: "straight" }
-    ]
-  },
-  {
-    question: "Do you prefer taking risks or playing it safe?",
-    options: [
-      { option: "I love challenges and trying new things!", value: "gay" },
-      { option: "I take calculated risks but value stability.", value: "bi" },
-      { option: "I stick to what I know to avoid risks.", value: "straight" }
-    ]
-  },
-  {
-    question: "How do you handle conflicts?",
-    options: [
-      { option: "I express myself openly during conflicts.", value: "gay" },
-      { option: "I'm calm but may get defensive.", value: "bi" },
-      { option: "I avoid conflicts and prioritize harmony.", value: "straight" }
-    ]
-  },
-  {
-    question: "Do you enjoy precision and attention to detail?",
-    options: [
-      { option: "Yes, I love puzzles and intricate crafts!", value: "gay" },
-      { option: "Sometimes, but I also like relaxed activities.", value: "bi" },
-      { option: "No, I prefer casual or creative pursuits.", value: "straight" }
-    ]
-  },
-  {
-    question: "What type of music do you often listen to?",
-    options: [
-      { option: "Indie rock, electronic, or alternative", value: "gay" },
-      { option: "Pop, hip-hop, or R&B", value: "bi" },
-      { option: "Classic rock, country, or classical", value: "straight" }
-    ]
-  },
-  {
-    question: "Do you prefer spending time alone or with others?",
-    options: [
-      { option: "Alone - I recharge when I'm by myself", value: "gay" },
-      { option: "With a group - I love socializing!", value: "bi" },
       {
         option:
-          "With friends - I enjoy their company but also value alone time.",
+          "I usually fantasize about or have romantic feelings towards people of my same gender",
+        value: "gay"
+      },
+      {
+        option: "I sometimes find myself attracted to more than one gender",
+        value: "bi"
+      },
+      { option: "Just for fun", value: "straight" }
+    ]
+  },
+  {
+    question:
+      "When you're at a party or social gathering, what do you usually find yourself gravitating towards?",
+    options: [
+      {
+        option: "I tend to stick with people who share similar interests",
+        value: "bi"
+      },
+      {
+        option:
+          "I often find myself drawn to people who are similar to me in some way",
+        value: "gay"
+      },
+      {
+        option:
+          "I like to meet new people and try to connect with as many people as possible",
         value: "straight"
       }
     ]
   },
   {
-    question: "Do you consider yourself creative?",
+    question:
+      "What do you think is the most important thing in a relationship?",
     options: [
-      { option: "Yes, I express myself through art or music", value: "gay" },
-      { option: "Maybe - I enjoy creative pursuits.", value: "bi" },
-      { option: "No - I focus on other aspects of life.", value: "straight" }
+      { option: "Communication and trust are key", value: "bi" },
+      {
+        option: "Emotional intimacy and connection are essential",
+        value: "gay"
+      },
+      { option: "Shared values and goals are crucial", value: "straight" }
     ]
   },
   {
-    question: "How do you handle change or unexpected events?",
+    question:
+      "Have you ever looked at a person of your same gender and felt sexually attracted to them?",
     options: [
-      { option: "I'm open to new experiences and adapt easily.", value: "gay" },
-      { option: "I'm flexible but appreciate routine.", value: "bi" },
-      { option: "I prefer predictability and stability.", value: "straight" }
+      { option: "Yes, all of my crushes are my same gender", value: "gay" },
+      {
+        option:
+          "Sometimes, but I find myself attracted to more than one gender",
+        value: "bi"
+      },
+      {
+        option: "Nope. I only feel attracted to people of the opposite gender.",
+        value: "straight"
+      }
+    ]
+  },
+  {
+    question:
+      "When you're in a new relationship, what do you tend to prioritize?",
+    options: [
+      {
+        option: "I focus on building a strong emotional connection",
+        value: "bi"
+      },
+      { option: "I prioritize physical attraction and intimacy", value: "gay" },
+      {
+        option:
+          "I focus on building a strong foundation for our future together",
+        value: "straight"
+      }
+    ]
+  },
+  {
+    question:
+      "What do you usually find yourself reading about or watching online?",
+    options: [
+      {
+        option: "I'm interested in science, technology, and social issues",
+        value: "bi"
+      },
+      { option: "I'm more into fiction, romance, and fantasy", value: "gay" },
+      {
+        option: "I'm more interested in news, sports, and current events",
+        value: "straight"
+      }
+    ]
+  },
+  {
+    question:
+      "If your partner offered you a threesome with someone of the same sex of your choosing you would:",
+    options: [
+      {
+        option: "Be excited to try something with someone of your same gender!",
+        value: "gay"
+      },
+      {
+        option: "Be open to trying something with someone of your same gender.",
+        value: "bi"
+      },
+      {
+        option: "Never go for it. I only like a gender other than my own.",
+        value: "straight"
+      },
+      {
+        option: "I wouldn’t want to have a threesome regardless of gender.",
+        value: "straight"
+      }
+    ]
+  },
+  {
+    question:
+      "Think about the people you have formed the strongest or most intense emotional bonds with in your life. These people tend to …",
+    options: [
+      { option: "Be of the same gender as me", value: "gay" },
+      {
+        option:
+          "Vary – sometimes they are my same gender, other times they are of another gender",
+        value: "bi"
+      },
+      { option: "Be of another gender than myself", value: "straight" }
+    ]
+  },
+  {
+    question:
+      "How important is physical appearance in your attraction to others?",
+    options: [
+      {
+        option:
+          "Physical appearance plays a significant role in my attraction to others.",
+        value: "straight"
+      },
+      {
+        option:
+          "While physical appearance matters somewhat, I'm more drawn to personality and emotional connection.",
+        value: "bi"
+      },
+      {
+        option:
+          "I prioritize personality and emotional connection over physical appearance in my attractions.",
+        value: "gay"
+      }
+    ]
+  },
+  {
+    question: "How do you feel about same-sex relationships?",
+    options: [
+      {
+        option: "I think they're wonderful and should be celebrated!",
+        value: "gay"
+      },
+      {
+        option:
+          "I think they're okay, but not necessarily something I would pursue myself",
+        value: "bi"
+      },
+      {
+        option:
+          "I'm not sure what to think about them, but I'm open to learning more",
+        value: "straight"
+      },
+      {
+        option: "I don't think they're appropriate or acceptable",
+        value: "straight"
+      }
     ]
   }
 ];
+
+const totalQuestions = questions.length;
 
 const orientations = {
   straight: 0,
@@ -273,6 +368,35 @@ function showResult() {
       ? "bisexual"
       : "gay"
   }.`;
+
+  const progressBar = document.createElement("div");
+  progressBar.id = "progress-bar";
+  progressBar.classList.add("progress");
+  resultContainer.appendChild(progressBar);
+
+  Object.keys(orientations).forEach((orientation) => {
+    const progressBarElement = document.createElement("div");
+    progressBarElement.classList.add("progress-bar");
+    progressBarElement.classList.add(
+      `bg-${
+        orientation === "straight"
+          ? "danger"
+          : orientation === "bi"
+          ? "primary"
+          : "info"
+      }`
+    );
+    progressBarElement.style.width = `${
+      (orientations[orientation] / totalQuestions) * 100
+    }%`;
+    progressBarElement.setAttribute(
+      "aria-valuenow",
+      `${orientations[orientation]}`
+    );
+    progressBarElement.setAttribute("aria-valuemin", "0");
+    progressBarElement.setAttribute("aria-valuemax", `${totalQuestions * 100}`);
+    progressBar.appendChild(progressBarElement);
+  });
 
   document.querySelector(
     ".straight"
